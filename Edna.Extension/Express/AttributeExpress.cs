@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text; 
+using System.Text;
 
 #region << 版 本 注 释 >>
 /*----------------------------------------------------------------
