@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edna.EntityCore", "Edna.EntityCore\Edna.EntityCore.csproj", "{3FE60421-4139-45B6-A154-54254F00CF74}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edna.Configuration", "Edna.Configuration\Edna.Configuration.csproj", "{69D254BC-0F28-4E4E-9005-A29A888D7CF1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edna.Service", "Edna.Service\Edna.Service.csproj", "{FF2DDF5F-A72E-48E5-A5C2-5F7D57D786EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edna.Extension", "Edna.Extension\Edna.Extension.csproj", "{E6FAA33D-C8DE-41E7-8FCA-26B60BE94FF6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edna.ApiCore", "Edna.ApiCore\Edna.ApiCore.csproj", "{A7E18071-0A58-4EEE-8CF5-4B42299AFAF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edna.Quartz", "Edna.Quartz\Edna.Quartz.csproj", "{2C8E01ED-F0AC-48D3-8F08-6A41620E947C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FE60421-4139-45B6-A154-54254F00CF74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE60421-4139-45B6-A154-54254F00CF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE60421-4139-45B6-A154-54254F00CF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE60421-4139-45B6-A154-54254F00CF74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69D254BC-0F28-4E4E-9005-A29A888D7CF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D254BC-0F28-4E4E-9005-A29A888D7CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D254BC-0F28-4E4E-9005-A29A888D7CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D254BC-0F28-4E4E-9005-A29A888D7CF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF2DDF5F-A72E-48E5-A5C2-5F7D57D786EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF2DDF5F-A72E-48E5-A5C2-5F7D57D786EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF2DDF5F-A72E-48E5-A5C2-5F7D57D786EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF2DDF5F-A72E-48E5-A5C2-5F7D57D786EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6FAA33D-C8DE-41E7-8FCA-26B60BE94FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6FAA33D-C8DE-41E7-8FCA-26B60BE94FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6FAA33D-C8DE-41E7-8FCA-26B60BE94FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6FAA33D-C8DE-41E7-8FCA-26B60BE94FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7E18071-0A58-4EEE-8CF5-4B42299AFAF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7E18071-0A58-4EEE-8CF5-4B42299AFAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7E18071-0A58-4EEE-8CF5-4B42299AFAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7E18071-0A58-4EEE-8CF5-4B42299AFAF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C8E01ED-F0AC-48D3-8F08-6A41620E947C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C8E01ED-F0AC-48D3-8F08-6A41620E947C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C8E01ED-F0AC-48D3-8F08-6A41620E947C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C8E01ED-F0AC-48D3-8F08-6A41620E947C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A20B8E09-4285-41C8-95A6-F6C4BEBED20C}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="sqlSugarCore" Version="4.9.7.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Edna.Configuration\Edna.Configuration.csproj" />
+    <ProjectReference Include="..\Edna.Extension\Edna.Extension.csproj" />
+  </ItemGroup>
+
+</Project>
