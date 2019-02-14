@@ -24,7 +24,7 @@ namespace Edna.ApiCore.Controllers
         /// <returns></returns>
         [HttpGet("Get")]
         [Author(Roles.AdminRead)]
-        public async Task<ActionResult<Object>> Get()=> await SysService.Search();
+        public async Task<ActionResult<Object>> Get() => await SysService.Search();
         /// <summary>
         /// 登录
         /// </summary>
@@ -34,12 +34,26 @@ namespace Edna.ApiCore.Controllers
         public async Task<ActionResult<Object>> Login()
         {
             var claimIdentity = new ClaimsIdentity("Cookie");
-             var RoleAdmin = await SysService.Login();
+            var RoleAdmin = await SysService.Login();
             claimIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, RoleAdmin.RolePermissionId.ToString()));
             claimIdentity.AddClaim(new Claim(ClaimTypes.Name, RoleAdmin.AdminName));
             claimIdentity.AddClaim(new Claim(ClaimTypes.Role, RoleAdmin.HandlerRole));
             await HttpContext.SignInAsync(new ClaimsPrincipal(claimIdentity), new AuthenticationProperties { IsPersistent = true });
             return "登录成功!";
         }
+        /// <summary>
+        /// 软删除
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("BatchDel")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Object>> BatchDel()=> await SysService.BatchDel();
+        /// <summary>
+        /// 数据恢复
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("RecoveryData")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Object>> RecoveryData() => await SysService.RecoveryData();
     }
 }

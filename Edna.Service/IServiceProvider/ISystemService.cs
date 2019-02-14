@@ -24,5 +24,7 @@ namespace Edna.Service.IServiceProvider
     {
         Task<Object> Search();
         Task<AdminRoleViewModel> Login();
+        Task<Object> BatchDel();
+        Task<Object> RecoveryData();
     }
 }

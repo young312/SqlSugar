@@ -30,6 +30,7 @@ namespace Edna.Extension.Express
         /// <typeparam name="K">Model</typeparam>
         /// <param name="Express">表达式</param>
         /// <returns></returns>
+         // GetAttributeType<T,K>(t=>t.Property)
         public static T GetAttributeType<T, K>(Expression<Func<K, Object>> Express)
         {
             if (Express == null) return default(T);
