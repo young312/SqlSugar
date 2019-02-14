@@ -42,24 +42,12 @@ namespace Edna.Service.ServiceProvider
         public async Task<Object> BatchDel()
         {
             List<Administrator> administrator = Emily.Queryable<Administrator>().Where(t => t.IsDelete == false).ToList();
-            administrator.ForEach(t => {
-                t.DeleteTime =DateTime.Now;
-                t.DeleteUser = "测试";
-                t.DeleteUserId = Guid.NewGuid();
-                t.IsDelete = true;
-            });
-            return await base.SoftDeletion<Administrator>(administrator);
+            return await base.AlterData<Administrator>(administrator,DbReturnTypes.AlterSoft);
         }
         public async Task<Object> RecoveryData()
         {
             List<Administrator> administrator = Emily.Queryable<Administrator>().Where(t => t.IsDelete == true).ToList();
-            administrator.ForEach(t => {
-                t.DeleteTime = null;
-                t.DeleteUser = null;
-                t.DeleteUserId = null;
-                t.IsDelete = false;
-            });
-            return await base.AlterData<Administrator>(administrator);
+            return await base.AlterData<Administrator>(administrator, DbReturnTypes.AlterSoft,false);
            
         }
     }

@@ -115,10 +115,13 @@ namespace Edna.EntityCore
         /// </summary>
         /// <typeparam name="Entity"></typeparam>
         /// <param name="entity"></param>
+        /// <param name="type"></param>
+        /// <param name="Del"></param>
+        /// <param name="ObjExp"></param>
+        /// <param name="BoolExp"></param>
         /// <returns></returns>
-        public virtual async Task<Object> AlterData<Entity>(List<Entity> entity,Boolean Del=true,
-            Expression<Func<Entity, bool>> BoolExp=null, DbReturnTypes type= DbReturnTypes.AlterSingle,
-            Expression<Func<Entity, Object>> ObjExp = null) where Entity : class, new()
+        public virtual async Task<Object> AlterData<Entity>(List<Entity> entity, DbReturnTypes type = DbReturnTypes.AlterSingle, 
+            Boolean Del=true, Expression<Func<Entity, Object>> ObjExp = null,Expression < Func<Entity, bool>> BoolExp=null) where Entity : class, new()
         {
             entity.ForEach(t => {
                 PropertyExpress.SetProptertyValue<Entity>("UpdateUser")(t, "测试");
@@ -140,7 +143,6 @@ namespace Edna.EntityCore
                     return await Emily.Updateable(entity).Where(BoolExp).ExecuteCommandAsync();
             }
         }
-
         //public virtual async Task<>
     }
 }
