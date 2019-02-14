@@ -2,6 +2,7 @@
 using Edna.EntityCore.Caches;
 using Edna.EntityCore.Model;
 using Edna.Extension.Attributes;
+using Edna.Extension.Express;
 using Edna.Extension.LoggerFactory;
 using SqlSugar;
 using System;
@@ -110,30 +111,36 @@ namespace Edna.EntityCore
             }
         }
         /// <summary>
-        /// 软删除
+        /// 更新数据通用
         /// </summary>
         /// <typeparam name="Entity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual async Task<Object> SoftDeletion<Entity>(List<Entity> entity) where Entity : class, new()
+        public virtual async Task<Object> AlterData<Entity>(List<Entity> entity,Boolean Del=true,
+            Expression<Func<Entity, bool>> BoolExp=null, DbReturnTypes type= DbReturnTypes.AlterSingle,
+            Expression<Func<Entity, Object>> ObjExp = null) where Entity : class, new()
         {
-            var Dynamic = new { F1 = (object)null, F2 = (object)null, F3 = (object)null, F4 = (object)null };
-            var Constructor = Dynamic.GetType().GetConstructors().FirstOrDefault();
-            List<Expression> Exps = new List<Expression>();
-            ParameterExpression Parameter = Expression.Parameter(typeof(Entity), "t");
-            typeof(Entity).GetProperties().ToList().ForEach(x =>
-            {
-                if (x.GetCustomAttributes(true).Any(t => t.GetType() == typeof(RemoveAttribute)))
-                {
-                    MemberExpression PropertyExpress = Expression.Property(Parameter, x.Name);
-                    UnaryExpression ConvterExpress = Expression.Convert(PropertyExpress, typeof(object));
-                    Exps.Add(ConvterExpress);
-                }
+            entity.ForEach(t => {
+                PropertyExpress.SetProptertyValue<Entity>("UpdateUser")(t, "测试");
+                PropertyExpress.SetProptertyValue<Entity>("UpdateUserId")(t, null);
+                PropertyExpress.SetProptertyValue<Entity>("UpdateTime")(t, DateTime.Now);
             });
-            var Exp = Expression.Lambda<Func<Entity, object>>(Expression.New(Constructor, Exps), Parameter);
-            await Task.CompletedTask;
-            return Emily.Saveable(entity).UpdateColumns(Exp).ExecuteReturnList();
+            switch (type)
+            {
+                case DbReturnTypes.AlterEntity:
+                    return await Emily.Updateable(entity).Where(BoolExp).ExecuteCommandAsync();
+                case DbReturnTypes.AlterCols:
+                    return await Emily.Updateable(entity).UpdateColumns(ObjExp).Where(BoolExp).ExecuteCommandAsync();
+                case DbReturnTypes.AlterSoft:
+                    entity.ForEach(t => {
+                        PropertyExpress.SetProptertyValue<Entity>("IsDelete")(t, Del);
+                    });
+                    return await Emily.Updateable(entity).UpdateColumns(ObjExp).Where(BoolExp).ExecuteCommandAsync();
+                default:
+                    return await Emily.Updateable(entity).Where(BoolExp).ExecuteCommandAsync();
+            }
         }
-    }
 
+        //public virtual async Task<>
+    }
 }

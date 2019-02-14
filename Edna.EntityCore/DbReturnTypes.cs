@@ -41,7 +41,25 @@ namespace Edna.EntityCore
         /// <summary>
         /// Return Entity
         /// </summary>
-        Model = 4
+        Model = 4,
+        #endregion
+        #region EnumOfAlter
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        AlterSingle = 5,
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        AlterEntity = 6,
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        AlterCols = 7,
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        AlterSoft = 8
         #endregion
     }
 }

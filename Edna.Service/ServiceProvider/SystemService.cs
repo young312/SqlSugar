@@ -59,7 +59,8 @@ namespace Edna.Service.ServiceProvider
                 t.DeleteUserId = null;
                 t.IsDelete = false;
             });
-            return await base.SoftDeletion<Administrator>(administrator);
+            return await base.AlterData<Administrator>(administrator);
+           
         }
     }
 }

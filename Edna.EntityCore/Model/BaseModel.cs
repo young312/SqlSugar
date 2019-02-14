@@ -31,61 +31,51 @@ namespace Edna.EntityCore.Model
         /// 创建人
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "NVARCHAR", ColumnDescription = "创建人", Length = 50)]
-        [Insert]
         public string CreateUser { get; set; }
         /// <summary>
         /// 修改人
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "NVARCHAR", ColumnDescription = "修改人", Length = 50)]
-        [Alter]
         public string UpdateUser { get; set; }
         /// <summary>
         /// 删除人
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "NVARCHAR", ColumnDescription = "删除人", Length = 50)]
-        [Remove]
         public string DeleteUser { get; set; }
         /// <summary>
         /// 创建人Id
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "创建人Id")]
-        [Insert]
         public Guid? CreateUserId { get; set; }
         /// <summary>
         /// 修改人Id
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "修改人Id")]
-        [Alter]
         public Guid? UpdateUserId { get; set; }
         /// <summary>
         /// 删除人Id
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "删除人Id")]
-        [Remove]
         public Guid? DeleteUserId { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "创建时间")]
-        [Insert]
         public DateTime? CreateTime { get; set; }
         /// <summary>
         /// 修改时间
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "修改时间")]
-        [Alter]
         public DateTime? UpdateTime { get; set; }
         /// <summary>
         /// 删除时间
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "删除时间")]
-        [Remove]
         public DateTime? DeleteTime { get; set; }
         /// <summary>
         /// 是否删除
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "是否删除")]
-        [Remove]
         public bool? IsDelete { get; set; }
         /// <summary>
         /// 审核状态

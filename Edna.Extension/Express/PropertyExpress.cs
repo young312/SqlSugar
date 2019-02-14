@@ -48,7 +48,7 @@ namespace Edna.Extension.Express
         /// <typeparam name="T"></typeparam>
         /// <param name="PropertyName"></param>
         /// <returns></returns>
-        public static Action<T,Object> SetProptertyValue<T>(String PropertyName) where T : class, new()
+        public static Action<T, Object> SetProptertyValue<T>(String PropertyName) where T : class, new()
         {
             var type = typeof(T);
             var property = type.GetProperty(PropertyName);
@@ -59,11 +59,31 @@ namespace Edna.Extension.Express
             var valueParameterExpression = Expression.Parameter(typeof(object), "val");
             var valueUnaryExpression = Expression.Convert(valueParameterExpression, property.PropertyType);
 
-            //// 调用给属性赋值的方法
+            // 调用给属性赋值的方法
             var body = Expression.Call(objectUnaryExpression, property.GetSetMethod(), valueUnaryExpression);
             var expression = Expression.Lambda<Action<T, object>>(body, objectParameterExpression, valueParameterExpression);
 
             return expression.Compile();
+        }
+        /// <summary>
+        /// 获取多字段表达式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Entity"></param>
+        /// <returns></returns>
+        public static Expression<Func<T, Object>> GetExpression<T>(T Entity)
+        {
+            List<Expression> Exps = new List<Expression>();
+            ParameterExpression Parameter = Expression.Parameter(typeof(T), "t");
+            var Dynamic = new { Field = (object)null };
+            var Constructor = Dynamic.GetType().GetConstructors().FirstOrDefault();
+            typeof(T).GetProperties().ToList().ForEach(x =>
+            {
+                MemberExpression PropertyExpress = Expression.Property(Parameter, x.Name);
+                UnaryExpression ConvterExpress = Expression.Convert(PropertyExpress, typeof(object));
+                Exps.Add(ConvterExpress);
+            });
+            return Expression.Lambda<Func<T, object>>(Expression.New(Constructor, Exps), Parameter);
         }
     }
 }
