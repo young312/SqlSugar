@@ -70,13 +70,13 @@ namespace Edna.Extension.Express
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="Entity"></param>
+        /// <param name="AnonmouseType"></param>
         /// <returns></returns>
-        public static Expression<Func<T, Object>> GetExpression<T>(T Entity)
+        public static Expression<Func<T, Object>> GetExpression<T>(T Entity,Type AnonmouseType)
         {
             List<Expression> Exps = new List<Expression>();
             ParameterExpression Parameter = Expression.Parameter(typeof(T), "t");
-            var Dynamic = new { Field = (object)null };
-            var Constructor = Dynamic.GetType().GetConstructors().FirstOrDefault();
+            var Constructor = AnonmouseType.GetType().GetConstructors().FirstOrDefault();
             typeof(T).GetProperties().ToList().ForEach(x =>
             {
                 MemberExpression PropertyExpress = Expression.Property(Parameter, x.Name);

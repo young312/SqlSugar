@@ -25,7 +25,7 @@ namespace Edna.EntityCore
         /// <summary>
         /// Return Boolean
         /// </summary>
-        Default = 0,
+        InsertDefault = 0,
         /// <summary>
         ///  Return Rows
         /// </summary>
@@ -47,7 +47,7 @@ namespace Edna.EntityCore
         /// <summary>
         ///  Return Int
         /// </summary>
-        AlterSingle = 5,
+        AlterDefault = 5,
         /// <summary>
         ///  Return Int
         /// </summary>
@@ -59,7 +59,26 @@ namespace Edna.EntityCore
         /// <summary>
         ///  Return Int
         /// </summary>
-        AlterSoft = 8
+        AlterSoft = 8,
         #endregion
+        #region EnumOfRemove
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        RemoveDefault = 9,
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        RemoveEntity = 10,
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        WithNoId = 11,
+        /// <summary>
+        ///  Return Int
+        /// </summary>
+        WithWhere = 12,
+        #endregion
+
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Edna.Configuration;
 using Edna.EntityCore.Caches;
 using Edna.EntityCore.Model;
-using Edna.Extension.Attributes;
 using Edna.Extension.Express;
 using Edna.Extension.LoggerFactory;
 using SqlSugar;
@@ -93,8 +92,15 @@ namespace Edna.EntityCore
         /// <param name="entity"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public virtual async Task<Object> InsertData<Entity>(Entity entity, DbReturnTypes type = DbReturnTypes.Default) where Entity : class, new()
+        public virtual async Task<Object> InsertData<Entity>(List<Entity> entity, DbReturnTypes type = DbReturnTypes.InsertDefault) where Entity : class, new()
         {
+            entity.ForEach(t =>
+            {
+                PropertyExpress.SetProptertyValue<Entity>("Id")(t, Guid.NewGuid());
+                PropertyExpress.SetProptertyValue<Entity>("CreateUser")(t, "测试");
+                PropertyExpress.SetProptertyValue<Entity>("CreateUserId")(t, null);
+                PropertyExpress.SetProptertyValue<Entity>("CeateTime")(t, DateTime.Now);
+            });
             IInsertable<Entity> Insert = Emily.Insertable<Entity>(entity);
             switch (type)
             {
@@ -120,13 +126,24 @@ namespace Edna.EntityCore
         /// <param name="ObjExp"></param>
         /// <param name="BoolExp"></param>
         /// <returns></returns>
-        public virtual async Task<Object> AlterData<Entity>(List<Entity> entity, DbReturnTypes type = DbReturnTypes.AlterSingle, 
-            Boolean Del=true, Expression<Func<Entity, Object>> ObjExp = null,Expression < Func<Entity, bool>> BoolExp=null) where Entity : class, new()
+        public virtual async Task<Object> AlterData<Entity>(List<Entity> entity, DbReturnTypes type = DbReturnTypes.AlterDefault,
+            Boolean Del = true, Expression<Func<Entity, Object>> ObjExp = null, Expression<Func<Entity, bool>> BoolExp = null) where Entity : class, new()
         {
-            entity.ForEach(t => {
-                PropertyExpress.SetProptertyValue<Entity>("UpdateUser")(t, "测试");
-                PropertyExpress.SetProptertyValue<Entity>("UpdateUserId")(t, null);
-                PropertyExpress.SetProptertyValue<Entity>("UpdateTime")(t, DateTime.Now);
+            entity.ForEach(t =>
+            {
+                if (type != DbReturnTypes.AlterSoft)
+                {
+                    PropertyExpress.SetProptertyValue<Entity>("UpdateUser")(t, "测试");
+                    PropertyExpress.SetProptertyValue<Entity>("UpdateUserId")(t, null);
+                    PropertyExpress.SetProptertyValue<Entity>("UpdateTime")(t, DateTime.Now);
+                }
+                else
+                {
+                    PropertyExpress.SetProptertyValue<Entity>("DeleteUser")(t, "测试");
+                    PropertyExpress.SetProptertyValue<Entity>("DeleteUserId")(t, null);
+                    PropertyExpress.SetProptertyValue<Entity>("DeleteTime")(t, DateTime.Now);
+                    PropertyExpress.SetProptertyValue<Entity>("IsDelete")(t, Del);
+                }
             });
             switch (type)
             {
@@ -135,14 +152,41 @@ namespace Edna.EntityCore
                 case DbReturnTypes.AlterCols:
                     return await Emily.Updateable(entity).UpdateColumns(ObjExp).Where(BoolExp).ExecuteCommandAsync();
                 case DbReturnTypes.AlterSoft:
-                    entity.ForEach(t => {
-                        PropertyExpress.SetProptertyValue<Entity>("IsDelete")(t, Del);
-                    });
                     return await Emily.Updateable(entity).UpdateColumns(ObjExp).Where(BoolExp).ExecuteCommandAsync();
                 default:
                     return await Emily.Updateable(entity).Where(BoolExp).ExecuteCommandAsync();
             }
         }
-        //public virtual async Task<>
+        /// <summary>
+        /// 删除数据通用
+        /// </summary>
+        /// <typeparam name="Entity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="type"></param>
+        /// <param name="BoolExp"></param>
+        /// <param name="ObjExp"></param>
+        /// <returns></returns>
+        public virtual async Task<Object> RemoveData<Entity>(List<Entity> entity, DbReturnTypes type = DbReturnTypes.RemoveDefault,
+            Expression<Func<Entity, bool>> BoolExp = null, Expression<Func<Entity, Object>> ObjExp = null) where Entity : class, new()
+        {
+            List<Guid> Ids = new List<Guid>();
+            entity.ForEach(t =>
+            {
+                var Map = PropertyExpress.GetPropertiesValue<Entity>(t);
+                Ids.Add(Guid.Parse(Map["PrimaryId"].ObjToString()));
+            });
+            switch (type)
+            {
+                case DbReturnTypes.RemoveEntity:
+                    return await Emily.Deleteable<Entity>().Where(entity).ExecuteCommandAsync();
+                case DbReturnTypes.WithNoId:
+                    return await Emily.Deleteable<Entity>().In(ObjExp, Ids).ExecuteCommandAsync();
+                case DbReturnTypes.WithWhere:
+                    return await Emily.Deleteable<Entity>().Where(BoolExp).ExecuteCommandAsync();
+                default:
+                    return await Emily.Deleteable<Entity>().In(Ids).ExecuteCommandAsync();
+            }
+
+        }
     }
 }
