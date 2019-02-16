@@ -26,29 +26,49 @@ namespace Edna.Service.ServiceProvider
 {
     public class SystemService : SugerDbContext, ISystemService
     {
-        public async Task<Object> Search()
+        public async Task<Object> InsertTest()
         {
-            return await Emily.Queryable<Administrator>().Where(t=>t.IsDelete==false).FirstAsync();
+            AdminRoleViewModel ViewModel = new AdminRoleViewModel
+            {
+                Account = "Admin",
+                PassWord = "Admin"
+            };
+            Administrator Admin = ViewModel.AutoMapper<Administrator>();
+            List<Administrator> LA = new List<Administrator> { Admin };
+            return await base.InsertData<Administrator>(LA);
+        }
+        public async Task<Object> SearchTest()
+        {
+            return await Emily.Queryable<Administrator>().Where(t => t.IsDelete == false).FirstAsync();
+        }
+        public async Task<Object> UpdateTest()
+        {
+            List<Administrator> administrator = Emily.Queryable<Administrator>().Where(t => t.IsDelete == false).ToList();
+            return await base.AlterData<Administrator>(administrator, DbReturnTypes.AlterCols, null, t => new { t.Account, t.PassWord }, t => t.PrimaryId != Guid.Empty);
+        }
+        public async Task<Object> BatchDel()
+        {
+            List<Administrator> administrator = Emily.Queryable<Administrator>().Where(t => t.IsDelete == false).ToList();
+            return await base.AlterData<Administrator>(administrator, DbReturnTypes.AlterSoft);
+        }
+        public async Task<Object> RecoveryData()
+        {
+            List<Administrator> administrator = Emily.Queryable<Administrator>().Where(t => t.IsDelete == true).ToList();
+            return await base.AlterData<Administrator>(administrator, DbReturnTypes.AlterSoft, false);
+
+        }
+        public async Task<Object> RemoveTest() {
+            List<Administrator> administrator = Emily.Queryable<Administrator>().ToList();
+            return await base.RemoveData<Administrator>(administrator);
         }
         public async Task<AdminRoleViewModel> Login()
-         {
+        {
             AdminRoleViewModel AdminRole = Emily.Queryable<Administrator, RolePermission>((t, x) => new Object[] { JoinType.Left, t.RolePermissionId == x.PrimaryId })
                 .Where(t => t.Account.Equals("admin"))
                 .Where(t => t.PassWord.Equals("admin"))
                 .Select<AdminRoleViewModel>().First();
             await CacheFacoty.WriteCache<AdminRoleViewModel>(AdminRole, AdminRole.GetType().FullName, 1);
             return AdminRole;
-        }
-        public async Task<Object> BatchDel()
-        {
-            List<Administrator> administrator = Emily.Queryable<Administrator>().Where(t => t.IsDelete == false).ToList();
-            return await base.AlterData<Administrator>(administrator,DbReturnTypes.AlterSoft);
-        }
-        public async Task<Object> RecoveryData()
-        {
-            List<Administrator> administrator = Emily.Queryable<Administrator>().Where(t => t.IsDelete == true).ToList();
-            return await base.AlterData<Administrator>(administrator, DbReturnTypes.AlterSoft,false);
-           
         }
     }
 }

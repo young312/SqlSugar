@@ -22,9 +22,12 @@ namespace Edna.Service.IServiceProvider
 {
     public interface ISystemService : IService
     {
-        Task<Object> Search();
-        Task<AdminRoleViewModel> Login();
+        Task<Object> InsertTest();
+        Task<Object> SearchTest();
+        Task<Object> UpdateTest();
         Task<Object> BatchDel();
         Task<Object> RecoveryData();
+        Task<Object> RemoveTest();
+        Task<AdminRoleViewModel> Login();
     }
 }

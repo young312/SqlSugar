@@ -24,7 +24,7 @@ namespace Edna.ApiCore.Controllers
         /// <returns></returns>
         [HttpGet("Get")]
         [Author(Roles.AdminRead)]
-        public async Task<ActionResult<Object>> Get() => await SysService.Search();
+        public async Task<ActionResult<Object>> Get() => await SysService.SearchTest();
         /// <summary>
         /// 登录
         /// </summary>

@@ -127,7 +127,7 @@ namespace Edna.EntityCore
         /// <param name="BoolExp"></param>
         /// <returns></returns>
         public virtual async Task<Object> AlterData<Entity>(List<Entity> entity, DbReturnTypes type = DbReturnTypes.AlterDefault,
-            Boolean Del = true, Expression<Func<Entity, Object>> ObjExp = null, Expression<Func<Entity, bool>> BoolExp = null) where Entity : class, new()
+            Boolean? Del = true, Expression<Func<Entity, Object>> ObjExp = null, Expression<Func<Entity, bool>> BoolExp = null) where Entity : class, new()
         {
             entity.ForEach(t =>
             {
