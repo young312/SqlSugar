@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Edna.Extension.Attributes;
 using Edna.Extension.Attributes.RoleHandler;
+using Edna.Extension.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ namespace Edna.ApiCore.Controllers
     /// <summary>
     /// 系统
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("Api/[controller]/[action]")]
     [ApiController]
     public class SystemController : BaseApiController
     {
@@ -22,19 +23,21 @@ namespace Edna.ApiCore.Controllers
         ///  获取
         /// </summary>
         /// <returns></returns>
-        [HttpGet("Get")]
+        [AcceptVerbs("GET","POST")]
         [Author(Roles.AdminRead)]
         public async Task<ActionResult<Object>> Get() => await SysService.SearchTest();
         /// <summary>
         /// 登录
         /// </summary>
         /// <returns></returns>
-        [HttpGet("Login")]
+        [AcceptVerbs("GET", "POST")]
         [AllowAnonymous]
-        public async Task<ActionResult<Object>> Login()
+        public async Task<ActionResult<Object>> Login(AdminRoleViewModel ViewModel)
         {
             var claimIdentity = new ClaimsIdentity("Cookie");
-            var RoleAdmin = await SysService.Login();
+            var RoleAdmin = await SysService.Login(ViewModel);
+            if (RoleAdmin == null)
+                return "登录失败!";
             claimIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, RoleAdmin.RolePermissionId.ToString()));
             claimIdentity.AddClaim(new Claim(ClaimTypes.Name, RoleAdmin.AdminName));
             claimIdentity.AddClaim(new Claim(ClaimTypes.Role, RoleAdmin.HandlerRole));
@@ -45,15 +48,15 @@ namespace Edna.ApiCore.Controllers
         /// 软删除
         /// </summary>
         /// <returns></returns>
-        [HttpGet("BatchDel")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Object>> BatchDel()=> await SysService.BatchDel();
+        [AcceptVerbs("GET", "POST")]
+        [Author(Roles.UserDelete)]
+        public async Task<ActionResult<Object>> BatchDel() => await SysService.BatchDel();
         /// <summary>
         /// 数据恢复
         /// </summary>
         /// <returns></returns>
-        [HttpGet("RecoveryData")]
-        [AllowAnonymous]
+        [AcceptVerbs("GET", "POST")]
+        [Author(Roles.User)]
         public async Task<ActionResult<Object>> RecoveryData() => await SysService.RecoveryData();
     }
 }

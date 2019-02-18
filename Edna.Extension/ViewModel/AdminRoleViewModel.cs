@@ -36,7 +36,7 @@ namespace Edna.Extension.ViewModel
         /// <summary>
         /// 权限许可ID
         /// </summary>
-        public Guid RolePermissionId { get; set; }
+        public Guid? RolePermissionId { get; set; }
         /// <summary>
         /// 角色名称
         /// </summary>

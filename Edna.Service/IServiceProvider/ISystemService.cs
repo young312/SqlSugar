@@ -28,6 +28,6 @@ namespace Edna.Service.IServiceProvider
         Task<Object> BatchDel();
         Task<Object> RecoveryData();
         Task<Object> RemoveTest();
-        Task<AdminRoleViewModel> Login();
+        Task<AdminRoleViewModel> Login(AdminRoleViewModel ViewModel);
     }
 }

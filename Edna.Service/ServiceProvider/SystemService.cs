@@ -61,13 +61,14 @@ namespace Edna.Service.ServiceProvider
             List<Administrator> administrator = Emily.Queryable<Administrator>().ToList();
             return await base.RemoveData<Administrator>(administrator);
         }
-        public async Task<AdminRoleViewModel> Login()
+        public async Task<AdminRoleViewModel> Login(AdminRoleViewModel ViewModel)
         {
             AdminRoleViewModel AdminRole = Emily.Queryable<Administrator, RolePermission>((t, x) => new Object[] { JoinType.Left, t.RolePermissionId == x.PrimaryId })
-                .Where(t => t.Account.Equals("admin"))
-                .Where(t => t.PassWord.Equals("admin"))
+                .Where(t => t.Account.Equals(ViewModel.Account))
+                .Where(t => t.PassWord.Equals(ViewModel.PassWord))
                 .Select<AdminRoleViewModel>().First();
-            await CacheFacoty.WriteCache<AdminRoleViewModel>(AdminRole, AdminRole.GetType().FullName, 1);
+            if (AdminRole != null)
+                await CacheFacoty.WriteCache<AdminRoleViewModel>(AdminRole, AdminRole.GetType().FullName, 1);
             return AdminRole;
         }
     }

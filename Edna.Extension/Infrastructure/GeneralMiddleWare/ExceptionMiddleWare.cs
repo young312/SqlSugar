@@ -35,10 +35,15 @@ namespace Edna.Extension.Infrastructure.GeneralModel
             RequestDelegate = RequestDelegates;
             ExceptionMap = new Dictionary<int, String>
             {
-                { 401, "未授权的请求" },
-                { 404, "找不到该页面" },
-                { 403, "访问被拒绝" },
-                { 500, "服务器发生意外的错误" }
+                { 400, "错误请求" },
+                { 401, "未授权请求" },
+                { 403, "拒绝授权请求" },
+                { 404, "页面丢失" },
+                { 500, "内部服务器错误" },
+                { 501, "不支持的请求"},
+                { 502, "错误的网关"},
+                { 503, "服务不可用"},
+                { 504, "网关超时" },
             };
         }
         public async Task Invoke(HttpContext context)
@@ -66,7 +71,7 @@ namespace Edna.Extension.Infrastructure.GeneralModel
                     Ex = new Exception(ErrorMsg);
                     if (Ex != null)
                     {
-                        ResultApiMiddleWare Result =  new ResultApiMiddleWare() { IsSuccess = false, Info = Ex.Message ,StatusCode= context.Response.StatusCode };
+                        ResultApiMiddleWare Result = new ResultApiMiddleWare() { IsSuccess = false, Info = Ex.Message, StatusCode = context.Response.StatusCode };
                         context.Response.ContentType = "application/json";
                         await context.Response.WriteAsync(JsonConvert.SerializeObject(Result), Encoding.UTF8);
                     }
