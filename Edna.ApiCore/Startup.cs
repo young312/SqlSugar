@@ -47,6 +47,12 @@ namespace Edna.ApiCore
         {
             AutofocManage.CreateInstance().ServiceProvider(services);
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.Configure<ApiBehaviorOptions>(opt =>
+            {
+                opt.SuppressModelStateInvalidFilter = true;
+                opt.SuppressInferBindingSourcesForParameters = true;
+                opt.SuppressConsumesConstraintForFormFileParameters = true;
+            });
             //启用权限认证
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             //设置数据格式

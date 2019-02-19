@@ -23,9 +23,9 @@ namespace Edna.ApiCore.Controllers
         ///  获取
         /// </summary>
         /// <returns></returns>
-        [AcceptVerbs("GET","POST")]
+        [AcceptVerbs("GET", "POST")]
         [Author(Roles.AdminRead)]
-        public async Task<ActionResult<Object>> Get() => await SysService.SearchTest();
+        public async Task<ActionResult<Object>> Get()=> await SysService.SearchTest();
         /// <summary>
         /// 登录
         /// </summary>
