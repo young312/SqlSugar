@@ -26,17 +26,6 @@ namespace Edna.Extension.HttpClientFactory
 {
     public class HttpClients
     {
-        // 定义一个标识确保线程同步
-        private static readonly object locker = new object();
-        private static HttpClient Client;
-        public static HttpClient CreateInstance()
-        {
-            if (Client == null)
-                lock (locker)
-                    if (Client == null)
-                        Client = new HttpClient();
-            return Client;
-        }
         /// <summary>
         /// 将数据制作表单数据
         /// </summary>
@@ -73,22 +62,23 @@ namespace Edna.Extension.HttpClientFactory
         /// <returns></returns>
         public static async Task<String> HttpPostAsync(string url, IList<KeyValuePair<String, String>> data, Dictionary<string, string> headers = null, string contentType = null, int timeout = 0, Encoding encoding = null)
         {
-            Client = Client ?? CreateInstance();
-            if (headers != null)
-                foreach (KeyValuePair<string, string> header in headers)
-                {
-                    Client.DefaultRequestHeaders.Add(header.Key, header.Value);
-                }
-            Client.DefaultRequestHeaders.Remove("TimeSpan");
-            Client.DefaultRequestHeaders.Add("TimeSpan", ((Int64)(new TimeSpan(DateTime.UtcNow.Ticks - (new DateTime(1970, 1, 1, 0, 0, 0).Ticks)).TotalMilliseconds)).ToString());
-            if (timeout > 0)
-                Client.Timeout = new TimeSpan(0, 0, timeout);
-            HttpContent content = new FormUrlEncodedContent(data);
-            if (contentType != null)
-                content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-            HttpResponseMessage responseMessage = await Client.PostAsync(url, content);
-            Byte[] resultBytes = await responseMessage.Content.ReadAsByteArrayAsync();
-            return Encoding.UTF8.GetString(resultBytes);
+            using (HttpClient Client = new HttpClient())
+            {
+                if (headers != null)
+                    foreach (KeyValuePair<string, string> header in headers)
+                    {
+                        Client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    }
+                if (timeout > 0)
+                    Client.Timeout = new TimeSpan(0, 0, timeout);
+                HttpContent content = new FormUrlEncodedContent(data);
+                if (contentType != null)
+                    content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36");
+                HttpResponseMessage responseMessage = await Client.PostAsync(url, content);
+                Byte[] resultBytes = await responseMessage.Content.ReadAsByteArrayAsync();
+                return Encoding.UTF8.GetString(resultBytes);
+            }
         }
         /// <summary>
         /// Get异步请求
@@ -99,18 +89,19 @@ namespace Edna.Extension.HttpClientFactory
         /// <returns></returns>
         public static async Task<String> HttpGetAsync(string url, Dictionary<string, string> headers = null, int timeout = 0)
         {
-            Client = Client ?? CreateInstance();
-            if (headers != null)
-                foreach (KeyValuePair<string, string> header in headers)
-                {
-                    Client.DefaultRequestHeaders.Add(header.Key, header.Value);
-                }
-            if (Client.DefaultRequestHeaders.Remove("TimeSpan"))
-                Client.DefaultRequestHeaders.Add("TimeSpan", ((Int64)(new TimeSpan(DateTime.UtcNow.Ticks - (new DateTime(1970, 1, 1, 0, 0, 0).Ticks)).TotalMilliseconds)).ToString());
-            if (timeout > 0)
-                Client.Timeout = new TimeSpan(0, 0, timeout);
-            Byte[] resultBytes = await Client.GetByteArrayAsync(url);
-            return Encoding.Default.GetString(resultBytes);
+            using (HttpClient Client = new HttpClient())
+            {
+                if (headers != null)
+                    foreach (KeyValuePair<string, string> header in headers)
+                    {
+                        Client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                    }
+                if (timeout > 0)
+                    Client.Timeout = new TimeSpan(0, 0, timeout);
+                Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36");
+                Byte[] resultBytes = await Client.GetByteArrayAsync(url);
+                return Encoding.Default.GetString(resultBytes);
+            }
         }
     }
 }
